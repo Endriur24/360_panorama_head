@@ -293,7 +293,8 @@ tabButtons.forEach(button => {
     });
 });
 
-// Update notification UI
+// Creates and displays a notification when a new version of the app is available
+// Returns the notification element for potential future manipulation
 function createUpdateNotification() {
     const notification = document.createElement('div');
     notification.className = 'update-notification';
@@ -310,11 +311,13 @@ function createUpdateNotification() {
     return notification;
 }
 
-// Service Worker registration and update handling
+// Service Worker Registration and Update Management
 if ('serviceWorker' in navigator) {
+    // Prevents multiple refreshes when the new service worker takes control
     let refreshing = false;
 
-    // Handle page refresh when new service worker takes over
+    // Listens for when the new service worker takes control and refreshes the page
+    // This ensures all pages are running the same version of the app
     navigator.serviceWorker.addEventListener('controllerchange', () => {
         if (!refreshing) {
             refreshing = true;
@@ -322,27 +325,34 @@ if ('serviceWorker' in navigator) {
         }
     });
 
+    // Register the service worker and set up update handling
     navigator.serviceWorker.register('service-worker.js')
         .then(registration => {
-            // Check for updates when page loads
+            // Listen for new service worker installation
+            // This event fires when a new version of the app is available
             registration.addEventListener('updatefound', () => {
                 const newWorker = registration.installing;
+                // Monitor the installation process of the new service worker
                 newWorker.addEventListener('statechange', () => {
+                    // When installation is complete and there's an existing service worker
+                    // This means we have an update ready to be activated
                     if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
                         createUpdateNotification();
                         
-                        // Optional: Automatically trigger update after a delay
+                        // Optional: Automatically apply the update after 5 minutes
+                        // This ensures users eventually get the update even if they don't manually update
                         setTimeout(() => {
                             newWorker.postMessage('skipWaiting');
-                        }, 300000); // 5 minutes
+                        }, 300000); // 5 minutes delay
                     }
                 });
             });
 
-            // Check for updates periodically
+            // Periodically check for updates while the app is running
+            // This ensures users don't miss updates during long sessions
             setInterval(() => {
                 registration.update();
-            }, 3600000); // Every hour
+            }, 3600000); // Check every hour
         })
         .catch(err => console.error('Service Worker Registration Failed:', err));
 }
