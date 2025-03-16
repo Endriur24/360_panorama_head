@@ -1,4 +1,4 @@
-const CACHE_NAME = 'panohead-v2';
+const CACHE_NAME = 'panohead-v3';
 const ASSETS = [
     './',
     './index.html',
