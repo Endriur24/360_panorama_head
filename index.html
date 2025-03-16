@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PanoHead Control</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="currentColor" stroke-width="1.5"><path d="m22 5.85964c0-.79456-.7906-1.5259-2.117-2.10685-1.1747-.51445-2.383.46684-2.383 1.7492v3.21747m4.5-2.85982v12.71646c0 1.8909-4.4772 3.4237-10 3.4237-5.52285 0-10-1.5328-10-3.4237v-12.71646m20 0c0 1.19523-1.7889 2.24741-4.5 2.85982m-15.5-2.85982c0-.79456.79055-1.5259 2.11705-2.10685 1.17464-.51445 2.38295.46684 2.38295 1.7492v3.21747m-4.5-2.85982c0 1.19523 1.78889 2.24741 4.5 2.85982m0 0c1.5779.35643 3.46818.56389 5.5.56389 2.0318 0 3.9221-.20746 5.5-.56389"/><path d="m19.5 13c0 .8284-.6716 1.5-1.5 1.5s-1.5-.6716-1.5-1.5.6716-1.5 1.5-1.5 1.5.6716 1.5 1.5z"/><path d="m21 20-2.4956-2.1486c-.8048-.6928-2.0034-.7618-2.8892-.1663l-.2309.1552c-.6156.4139-1.4531.3445-1.9852-.1645l-3.321-3.1769c-.66292-.6341-1.72621-.668-2.43171-.0775l-1.35607 1.1351-3.79032 3.547" stroke-linecap="round"/></g></svg> PanoHead Control</h1>
+            
+            <!-- Connection Status -->
+            <div id="status-bar">
+                <i class="ri-bluetooth-line"></i>
+                <span>Status: Disconnected</span>
+            </div>
+        </header>
+
+        <main>
+            <!-- Mobile Navigation -->
+            <nav class="mobile-nav">
+                <button class="tab-btn active" data-tab="calibration"><i class="ri-tools-line"></i></button>
+                <button class="tab-btn" data-tab="settings"><i class="ri-settings-3-line"></i></button>
+                <button class="tab-btn" data-tab="control"><i class="ri-camera-3-line"></i></button>
+                <button class="tab-btn" data-tab="messages"><i class="ri-terminal-box-line"></i></button>
+            </nav>
+
+            <!-- Manual Calibration -->
+            <div class="section tab-content active" data-tab="calibration">
+                <h2><i class="ri-tools-line"></i> Calibration</h2>
+                <button id="connect-btn"><i class="ri-bluetooth-connect-line"></i> Connect to Bluetooth</button>
+                <div class="manual-control">
+                    <div class="tilt-controls">
+                        <div class="tilt-step">
+                            <label><i class="ri-ruler-line"></i> Step Size: <span id="step-value">20</span>°</label>
+                            <input type="range" id="tilt-step" min="1" max="100" value="20">
+                        </div>
+                        <div class="tilt-buttons">
+                            <button id="tilt-up"><i class="ri-arrow-up-line"></i> Tilt Up (+)</button>
+                            <button id="tilt-down"><i class="ri-arrow-down-line"></i> Tilt Down (-)</button>
+                        </div>
+                    </div>
+                    <button id="set-position"><i class="ri-checkbox-circle-line"></i> Set Top Position (p)</button>
+                </div>
+            </div>
+
+            <!-- Settings -->
+            <div class="section tab-content" data-tab="settings">
+                <h2><i class="ri-settings-3-line"></i> Settings</h2>
+                <div class="settings-grid">
+                    <div class="setting">
+                        <label><i class="ri-arrow-left-right-line"></i> Horizontal Photos (h)</label>
+                        <input type="number" id="horizontal-input" min="1" max="50" value="6">
+                    </div>
+                    <div class="setting">
+                        <label><i class="ri-arrow-up-down-line"></i> Vertical Photos (v)</label>
+                        <input type="number" id="vertical-input" min="1" max="50" value="3">
+                    </div>
+                    <div class="setting">
+                        <label><i class="ri-speed-up-line"></i> Acceleration (a)</label>
+                        <input type="number" id="acceleration-input" min="1" max="100" value="5">
+                    </div>
+                    <div class="setting">
+                        <label><i class="ri-speed-line"></i> Speed (q)</label>
+                        <input type="number" id="speed-input" min="1" max="50" value="5">
+                    </div>
+                    <div class="setting">
+                        <label><i class="ri-timer-line"></i> Delay Before Photo (d)</label>
+                        <input type="number" id="delay-input" min="1" max="100" value="3">
+                    </div>
+                    <div class="setting">
+                        <label><i class="ri-camera-line"></i> Max Exposure Time (t)</label>
+                        <input type="number" id="exposure-input" min="1" max="100" value="2">
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button id="save-settings"><i class="ri-save-line"></i> Save Settings ($)</button>
+                    <button id="reset-settings"><i class="ri-refresh-line"></i> Reset to Default (#)</button>
+                </div>
+            </div>
+
+            <!-- Panorama Control -->
+            <div class="section tab-content" data-tab="control">
+                <h2><i class="ri-camera-3-line"></i> Panorama Control</h2>
+                <div class="progress-container">
+                    <div class="progress-status">
+                        <span id="progress-text">Ready to start</span>
+                        <span id="photo-count"></span>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="progress-fill"></div>
+                    </div>
+                    <div class="matrix-preview" id="photo-matrix"></div>
+                </div>
+                <div class="button-group">
+                    <button id="start-btn"><i class="ri-play-circle-line"></i> Start Panorama (s)</button>
+                    <button id="pause-btn" disabled><i class="ri-pause-circle-line"></i> Pause (1)</button>
+                    <button id="resume-btn" disabled><i class="ri-play-circle-line"></i> Resume (0)</button>
+                    <button id="stop-btn"><i class="ri-stop-circle-line"></i> Emergency Stop (2)</button>
+                </div>
+            </div>
+
+            <!-- Status Log -->
+            <div class="section tab-content" data-tab="messages">
+                <h2><i class="ri-terminal-box-line"></i> Messages</h2>
+                <div id="message-log"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
