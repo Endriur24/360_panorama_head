@@ -328,6 +328,9 @@ if ('serviceWorker' in navigator) {
     // Register the service worker and set up update handling
     navigator.serviceWorker.register('service-worker.js')
         .then(registration => {
+            // Immediately check for updates when page loads
+            registration.update();
+
             // Listen for new service worker installation
             // This event fires when a new version of the app is available
             registration.addEventListener('updatefound', () => {
@@ -348,11 +351,11 @@ if ('serviceWorker' in navigator) {
                 });
             });
 
-            // Periodically check for updates while the app is running
-            // This ensures users don't miss updates during long sessions
+            // Check for updates more frequently while the app is running
+            // This ensures users don't miss updates during active sessions
             setInterval(() => {
                 registration.update();
-            }, 3600000); // Check every hour
+            }, 60000); // Check every minute for testing, adjust as needed
         })
         .catch(err => console.error('Service Worker Registration Failed:', err));
 }

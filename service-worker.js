@@ -1,5 +1,5 @@
 // Cache name with version - increment this version to trigger the update process
-const CACHE_NAME = 'panohead-v4';
+const CACHE_NAME = 'panohead-v5';
 
 // List of assets to cache for offline functionality
 const ASSETS = [
@@ -15,25 +15,33 @@ const ASSETS = [
 // Installation event: triggered when the service worker is first installed
 // This caches all the essential assets for offline functionality
 self.addEventListener('install', (event) => {
+    // Force the waiting service worker to become the active service worker
+    self.skipWaiting();
+    
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
     );
 });
 
 // Activation event: triggered when a new service worker takes control
-// This is responsible for cleaning up old caches from previous versions
+// This is responsible for cleaning up old caches and claiming clients
 self.addEventListener('activate', (event) => {
     event.waitUntil(
-        caches.keys().then((cacheNames) => {
-            return Promise.all(
-                cacheNames.map((cacheName) => {
-                    // Delete any cache that isn't the current version
-                    if (cacheName !== CACHE_NAME) {
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        })
+        Promise.all([
+            // Take control of all open clients/tabs immediately
+            clients.claim(),
+            // Clean up old caches
+            caches.keys().then((cacheNames) => {
+                return Promise.all(
+                    cacheNames.map((cacheName) => {
+                        // Delete any cache that isn't the current version
+                        if (cacheName !== CACHE_NAME) {
+                            return caches.delete(cacheName);
+                        }
+                    })
+                );
+            })
+        ])
     );
 });
 
