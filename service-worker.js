@@ -1,5 +1,5 @@
 // Cache name with version - increment this version to trigger the update process
-const CACHE_NAME = 'panohead-v10';
+const CACHE_NAME = 'panohead-v11';
 
 // List of assets to cache for offline functionality
 const ASSETS = [
