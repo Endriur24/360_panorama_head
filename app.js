@@ -295,7 +295,7 @@ tabButtons.forEach(button => {
 
 // Creates and displays a notification when a new version of the app is available
 // Returns the notification element for potential future manipulation
-function createUpdateNotification() {
+function createUpdateNotification(registration) {
     const notification = document.createElement('div');
     notification.className = 'update-notification';
     notification.innerHTML = `
@@ -306,7 +306,8 @@ function createUpdateNotification() {
     
     document.getElementById('update-app').addEventListener('click', () => {
         notification.remove();
-        window.location.reload();
+        // Tell the service worker to take control
+        registration.waiting.postMessage('skipWaiting');
     });
     return notification;
 }
@@ -337,16 +338,10 @@ if ('serviceWorker' in navigator) {
                 const newWorker = registration.installing;
                 // Monitor the installation process of the new service worker
                 newWorker.addEventListener('statechange', () => {
-                    // When installation is complete and there's an existing service worker
-                    // This means we have an update ready to be activated
-                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                        createUpdateNotification();
-                        
-                        // Optional: Automatically apply the update after 5 minutes
-                        // This ensures users eventually get the update even if they don't manually update
-                        setTimeout(() => {
-                            newWorker.postMessage('skipWaiting');
-                        }, 300000); // 5 minutes delay
+                // When installation is complete and there's an existing service worker
+                // This means we have an update ready to be activated
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    createUpdateNotification(registration);
                     }
                 });
             });
