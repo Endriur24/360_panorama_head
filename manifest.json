@@ -1,7 +1,7 @@
 {
-    "short_name": "PanoHead",
-    "name": "PanoHead Control",
-    "icons": [
+  "short_name": "PanoHead",
+  "name": "PanoHead Control",
+  "icons": [
     {
       "src": "/icons/android-chrome-192x192.png",
       "sizes": "192x192",
@@ -17,14 +17,15 @@
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
-   }  ],
-    "start_url": "/",
-    "display": "standalone",
-    "background_color": "#0f172a",
-    "theme_color": "#1e293b",
-    "orientation": "portrait",
-    "categories": ["utilities", "productivity"],
-    "prefer_related_applications": false,
-    "display_override": ["standalone", "fullscreen"],
-    "description": "Control your panorama head device and capture perfect panoramic photos"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#1e293b",
+  "orientation": "portrait",
+  "categories": ["utilities", "productivity"],
+  "prefer_related_applications": false,
+  "display_override": ["standalone", "fullscreen"],
+  "description": "Control your panorama head device and capture perfect panoramic photos"
 }

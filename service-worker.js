@@ -1,5 +1,5 @@
 // Cache name with version - increment this version to trigger the update process
-const CACHE_NAME = 'panohead-v12';
+const CACHE_NAME = 'panohead-v13';
 
 // List of assets to cache for offline functionality
 const ASSETS = [
@@ -9,7 +9,8 @@ const ASSETS = [
     './app.js',
     './manifest.json',
     './icons/android-chrome-192x192.png',
-    './icons/android-chrome-512x512.png'
+    './icons/android-chrome-512x512.png',
+    '.icons/maskable-icon.png'
 ];
 
 // Installation event: triggered when the service worker is first installed
