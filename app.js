@@ -110,7 +110,7 @@ class PanoHeadController {
     async connect() {
         try {
             this.device = await navigator.bluetooth.requestDevice({
-                // filters: [{ name: 'PanoHead' }],
+                filters: [{ name: 'PanoHead' }],
                 optionalServices: ['0000ffe0-0000-1000-8000-00805f9b34fb']
             });
 
