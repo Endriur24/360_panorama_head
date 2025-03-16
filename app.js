@@ -53,7 +53,8 @@ class PanoHeadController {
             'acceleration': 'acceleration-input',
             'speed': 'speed-input',
             'delay befote photo': 'delay-input',
-            'max exposure time': 'exposure-input'
+            'max exposure time': 'exposure-input',
+            'exposure amount': 'exp-amount-input'
         };
 
         lines.forEach(line => {
@@ -269,6 +270,10 @@ document.getElementById('vertical-input').addEventListener('change', (e) => {
 
 document.getElementById('save-settings').addEventListener('click', () => controller.sendCommand('$'));
 document.getElementById('reset-settings').addEventListener('click', () => controller.sendCommand('#'));
+
+document.getElementById('exp-amount-input').addEventListener('change', (e) => {
+    controller.sendCommand(`e${e.target.value}`);
+});
 
 // Register Service Worker
 // Mobile Tab Navigation
