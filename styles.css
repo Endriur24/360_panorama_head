@@ -420,3 +420,46 @@ label i {
         grid-template-columns: 1fr;
     }
 }
+
+.update-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--primary);
+    color: white;
+    padding: 16px 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 1000;
+    border: 1px solid var(--border);
+}
+
+.update-notification p {
+    margin: 0;
+}
+
+.update-notification button {
+    background-color: white;
+    color: var(--primary);
+    border: none;
+    padding: 8px 16px;
+    margin: 0;
+    min-height: unset;
+}
+
+.update-notification button:hover {
+    background-color: #f0f0f0;
+}
+
+@media (max-width: 480px) {
+    .update-notification {
+        width: calc(100% - 32px);
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+}

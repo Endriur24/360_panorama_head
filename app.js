@@ -293,8 +293,56 @@ tabButtons.forEach(button => {
     });
 });
 
+// Update notification UI
+function createUpdateNotification() {
+    const notification = document.createElement('div');
+    notification.className = 'update-notification';
+    notification.innerHTML = `
+        <p>A new version is available!</p>
+        <button id="update-app">Update</button>
+    `;
+    document.body.appendChild(notification);
+    
+    document.getElementById('update-app').addEventListener('click', () => {
+        notification.remove();
+        window.location.reload();
+    });
+    return notification;
+}
+
+// Service Worker registration and update handling
 if ('serviceWorker' in navigator) {
+    let refreshing = false;
+
+    // Handle page refresh when new service worker takes over
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!refreshing) {
+            refreshing = true;
+            window.location.reload();
+        }
+    });
+
     navigator.serviceWorker.register('service-worker.js')
-        .then(() => console.log('Service Worker Registered'))
+        .then(registration => {
+            // Check for updates when page loads
+            registration.addEventListener('updatefound', () => {
+                const newWorker = registration.installing;
+                newWorker.addEventListener('statechange', () => {
+                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                        createUpdateNotification();
+                        
+                        // Optional: Automatically trigger update after a delay
+                        setTimeout(() => {
+                            newWorker.postMessage('skipWaiting');
+                        }, 300000); // 5 minutes
+                    }
+                });
+            });
+
+            // Check for updates periodically
+            setInterval(() => {
+                registration.update();
+            }, 3600000); // Every hour
+        })
         .catch(err => console.error('Service Worker Registration Failed:', err));
 }
